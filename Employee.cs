@@ -15,21 +15,22 @@ namespace BethanysPieShopHRM
         public double wage;
         public double hourlyRate;
         public DateTime birthday;
+        public EmployeeType employeeType;
 
         const int minimalHoursWorded = 1;
 
-        public Employee(string first, string last, string em, DateTime bd) : this(first, last, em, bd, 0)
+        public Employee(string first, string last, string em, DateTime bd) : this(first, last, em, bd, 0, EmployeeType.StoreManager)
         {
         }
 
-        public Employee(string first, string last, string em, DateTime bd, double rate)
+        public Employee(string first, string last, string em, DateTime bd, double rate, EmployeeType emType)
         {
             firstName = first;
             lastName = last;
             email = em;
             birthday = bd;
             hourlyRate = rate;
-
+            employeeType = emType;
         }
         public void PerformWork()
         {
@@ -44,11 +45,44 @@ namespace BethanysPieShopHRM
             Console.WriteLine($"{firstName} has worked for {numberOfHOurs}");
         }
 
+        public int CalculateBonus(int bonus)
+        {
+            if (numberOfHoursWorked > 10)
+                bonus *= 2;
+
+            Console.WriteLine($"The employee got a bonus of {bonus}");
+            return bonus;
+        }
+
+
+        public int CalculateBonusAndTax(int bonus, int bonusTax)
+        {
+            if (numberOfHoursWorked > 10)
+                bonus *= 2;
+
+            if (bonus >= 200)
+            {
+                bonusTax = bonus / 10;
+                bonus -= bonusTax;
+            }
+
+            Console.WriteLine($"The employee got a bonus of {bonus} and the bonus tax is {bonusTax}");
+            return bonus;
+        }
+
         public double ReceiveWage(bool resetHours = true)
         {
-            wage = numberOfHoursWorked * hourlyRate;
+            if (employeeType == EmployeeType.Manager)
+            {
+                Console.WriteLine($"An extra was added since {firstName} is a manager!");
+                wage = numberOfHoursWorked * hourlyRate * 1.25;
+            }
+            else
+            {
+                wage = numberOfHoursWorked * hourlyRate;
+            }
 
-            Console.WriteLine($"{firstName} has received a wage of {wage} fro {numberOfHoursWorked} hours of work");
+            Console.WriteLine($"{firstName} has received a wage of {wage} for {numberOfHoursWorked} hours of work");
 
             if (resetHours)
                 numberOfHoursWorked = 0;
