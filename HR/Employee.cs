@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BethanysPieShopHRM
+namespace BethanysPieShopHRM.HR
 {
     internal class Employee
     {
@@ -15,9 +15,9 @@ namespace BethanysPieShopHRM
         public double wage;
         public double hourlyRate;
         public DateTime birthday;
-        public EmployeeType employeeType;
-
         const int minimalHoursWorded = 1;
+        public EmployeeType employeeType;
+        public static double taxRate = 0.15;
 
         public Employee(string first, string last, string em, DateTime bd) : this(first, last, em, bd, 0, EmployeeType.StoreManager)
         {
@@ -72,6 +72,7 @@ namespace BethanysPieShopHRM
 
         public double ReceiveWage(bool resetHours = true)
         {
+            double wageBeforeTax = 0.0;
             if (employeeType == EmployeeType.Manager)
             {
                 Console.WriteLine($"An extra was added since {firstName} is a manager!");
@@ -81,6 +82,8 @@ namespace BethanysPieShopHRM
             {
                 wage = numberOfHoursWorked * hourlyRate;
             }
+            double taxAmount = wageBeforeTax * taxRate;
+            wage = wageBeforeTax - taxAmount;
 
             Console.WriteLine($"{firstName} has received a wage of {wage} for {numberOfHoursWorked} hours of work");
 
@@ -92,7 +95,7 @@ namespace BethanysPieShopHRM
 
         public void DisplayEmployeeDetails()
         {
-            Console.WriteLine($"\nFirst name: {firstName}\nLast name: {lastName}\nEmail: {email}\nBirthday: {birthday.ToShortDateString()}");
+            Console.WriteLine($"\nFirst name: {firstName}\nLast name: {lastName}\nEmail: {email}\nBirthday: {birthday.ToShortDateString()}\nTax rate: {taxRate}");
         }
 
     }
