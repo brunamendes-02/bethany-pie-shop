@@ -42,7 +42,7 @@ namespace BethanysPieShopHRM.HR
         public void PerformWork(int numberOfHOurs)
         {
             numberOfHoursWorked += numberOfHOurs;
-            Console.WriteLine($"{firstName} has worked for {numberOfHOurs}");
+            Console.WriteLine($"{firstName} has worked for {numberOfHOurs} hours");
         }
 
         public int CalculateBonus(int bonus)
