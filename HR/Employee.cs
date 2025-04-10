@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BethanysPieShopHRM.HR
 {
-    internal class Employee
+    internal class Employee: IEmployee
     {
         private string firstName;
         private string lastName;
@@ -15,6 +11,7 @@ namespace BethanysPieShopHRM.HR
         private double wage;
         private double hourlyRate;
         private DateTime birthday;
+        private Address address;
         private const int minimalHoursWorded = 1;
         private static double taxRate = 0.15;
 
@@ -23,46 +20,53 @@ namespace BethanysPieShopHRM.HR
             get { return firstName; }
             set { firstName = value; }
         }
+
         public string LastName
         {
             get { return lastName; }
             set { lastName = value; }
         }
+
         public string Email
         {
             get { return email; }
             set { email = value; }
         }
+
         public int NumberOfHoursWorked
         {
             get { return numberOfHoursWorked; }
             protected set { numberOfHoursWorked = value; }
         }
+
         public double Wage
         {
             get { return wage; }
             private set { wage = value; }
         }
+
         public double HourlyRate
         {
             get { return hourlyRate; }
             set
             {
-                if (hourlyRate < 0) { hourlyRate = 0; } else { hourlyRate = value; }
-
+                if (value < 0) { hourlyRate = 0; } else { hourlyRate = value; }
             }
         }
+
         public DateTime Birthday
         {
             get { return birthday; }
             set { birthday = value; }
         }
 
-        public Employee(string firstName, string lastName, string email, DateTime birthDate) : this(firstName, lastName, email, birthDate, 0)
+        public Address Address
         {
+            get { return address; }
+            set { address = value; }
         }
 
-        public Employee(string firstName, string lastName, string email, DateTime birthDate, double hourlyRate)
+        public Employee(string firstName, string lastName, string email, DateTime birthDate, double hourlyRate = 0)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -70,15 +74,23 @@ namespace BethanysPieShopHRM.HR
             Birthday = birthDate;
             HourlyRate = hourlyRate;
         }
+
+
+        public Employee(string firstName, string lastName, string email, DateTime birthDate, double hourlyRate, string street, string houseNumber, string zipCode, string city)
+            : this(firstName, lastName, email, birthDate, hourlyRate)
+        {
+            Address = new Address(street, houseNumber, zipCode, city);
+        }
+
         public void PerformWork()
         {
             PerformWork(minimalHoursWorded);
         }
 
-        public void PerformWork(int numberOfHOurs)
+        public void PerformWork(int numberOfHours)
         {
-            NumberOfHoursWorked += numberOfHOurs;
-            Console.WriteLine($"{FirstName} has worked for {numberOfHOurs} hours");
+            NumberOfHoursWorked += numberOfHours;
+            Console.WriteLine($"{FirstName} has worked for {numberOfHours} hours");
         }
 
         public int CalculateBonus(int bonus)
@@ -89,7 +101,6 @@ namespace BethanysPieShopHRM.HR
             Console.WriteLine($"The employee got a bonus of {bonus}");
             return bonus;
         }
-
 
         public int CalculateBonusAndTax(int bonus, int bonusTax)
         {
@@ -104,6 +115,10 @@ namespace BethanysPieShopHRM.HR
 
             Console.WriteLine($"The employee got a bonus of {bonus} and the bonus tax is {bonusTax}");
             return bonus;
+        }
+
+        public virtual void GiveBonus() {
+            Console.WriteLine($"{FirstName} {LastName} received a generic bonus of 100!");
         }
 
         public double ReceiveWage(bool resetHours = true)
@@ -123,7 +138,18 @@ namespace BethanysPieShopHRM.HR
         public void DisplayEmployeeDetails()
         {
             Console.WriteLine($"\nFirst name: {FirstName}\nLast name: {LastName}\nEmail: {Email}\nBirthday: {Birthday.ToShortDateString()}\nTax rate: {taxRate}");
+
+            if (Address != null)
+            {
+                Console.WriteLine($"Address: {Address.Street}, {Address.HouseNumber}, {Address.ZipCode}, {Address.City}");
+            }
+
+
         }
 
+        public void GiveCompliment()
+        {
+            Console.WriteLine($"You've done a great job, {FirstName}!");
+        }
     }
 }

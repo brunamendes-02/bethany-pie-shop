@@ -17,5 +17,14 @@ namespace BethanysPieShopHRM.HR
             Console.WriteLine($"Manager {FirstName} is now attending a long meeting");
             
         }
+
+        public override void GiveBonus()
+        {
+            if(NumberOfHoursWorked > 5) {
+                Console.WriteLine($"Manager {FirstName} received a manager bonus of 500!");
+            } else {
+                Console.WriteLine($"Manager {FirstName} received a manager bonus of 250!");
+            }
+        }
     }
 }
