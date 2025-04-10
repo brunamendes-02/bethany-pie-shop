@@ -16,7 +16,6 @@ namespace BethanysPieShopHRM.HR
         private double hourlyRate;
         private DateTime birthday;
         private const int minimalHoursWorded = 1;
-        private EmployeeType employeeType;
         private static double taxRate = 0.15;
 
         public string FirstName
@@ -37,7 +36,7 @@ namespace BethanysPieShopHRM.HR
         public int NumberOfHoursWorked
         {
             get { return numberOfHoursWorked; }
-            private set { numberOfHoursWorked = value; }
+            protected set { numberOfHoursWorked = value; }
         }
         public double Wage
         {
@@ -58,24 +57,18 @@ namespace BethanysPieShopHRM.HR
             get { return birthday; }
             set { birthday = value; }
         }
-        public EmployeeType EmployeeType
-        {
-            get { return employeeType; }
-            set { employeeType = value; }
-        }
 
-        public Employee(string firstName, string lastName, string email, DateTime birthDate) : this(firstName, lastName, email, birthDate, 0, EmployeeType.StoreManager)
+        public Employee(string firstName, string lastName, string email, DateTime birthDate) : this(firstName, lastName, email, birthDate, 0)
         {
         }
 
-        public Employee(string firstName, string lastName, string email, DateTime birthDate, double hourlyRate, EmployeeType employeeType)
+        public Employee(string firstName, string lastName, string email, DateTime birthDate, double hourlyRate)
         {
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Birthday = birthDate;
             HourlyRate = hourlyRate;
-            EmployeeType = employeeType;
         }
         public void PerformWork()
         {
@@ -115,16 +108,7 @@ namespace BethanysPieShopHRM.HR
 
         public double ReceiveWage(bool resetHours = true)
         {
-            double wageBeforeTax = 0.0;
-            if (EmployeeType == EmployeeType.Manager)
-            {
-                Console.WriteLine($"An extra was added since {FirstName} is a manager!");
-                Wage = NumberOfHoursWorked * hourlyRate * 1.25;
-            }
-            else
-            {
-                Wage = NumberOfHoursWorked * hourlyRate;
-            }
+            double wageBeforeTax = NumberOfHoursWorked * HourlyRate;
             double taxAmount = wageBeforeTax * taxRate;
             Wage = wageBeforeTax - taxAmount;
 
