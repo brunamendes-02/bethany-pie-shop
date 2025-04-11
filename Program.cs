@@ -1,15 +1,60 @@
 ﻿using BethanysPieShopHRM.HR;
+using BethanysPieShopHRM;
 
 
-Employee bethany = new Employee("Bethany", "Smith", "bethany@snowball.be", new DateTime(1979, 1, 16), 25);
-Manager mary = new Manager("Mary", "Jones", "mary@snowball.be", new DateTime(1965, 1, 16), 30);
-Employee george = new Employee("George", "Jones", "george@snowball.be", new DateTime(1984, 3, 28), 30,  "New street", "123", "12345", "Pie Vile");
-JuniorResearcher bobJunior = new JuniorResearcher("Bob", "Spencer", "bob@snowball.be", new DateTime(1988, 1, 23), 17);
+List<Employee> employees = new List<Employee>();
 
-bethany.DisplayEmployeeDetails();
-bethany.GiveBonus();
+Console.ForegroundColor = ConsoleColor.Green;
+Console.WriteLine("************************************");
+Console.WriteLine("* Bethany's Pie Shop Employee App *");
+Console.WriteLine("************************************");
+Console.ForegroundColor = ConsoleColor.White;
 
-mary.DisplayEmployeeDetails();
-mary.GiveBonus();
+string userSelection;
 
-george.DisplayEmployeeDetails();
+Console.ForegroundColor = ConsoleColor.Blue;
+Utilities.CheckForExistingEmployeeFile();
+
+do
+{
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine($"\nLoaded {employees.Count} employee(s)\n\n");
+
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.WriteLine("************************");
+    Console.WriteLine("* Select an action *");
+    Console.WriteLine("************************");
+
+    Console.WriteLine("1: Register employee");
+    Console.WriteLine("2: View all employees");
+    Console.WriteLine("3: Save data");
+    Console.WriteLine("4: Load data");
+    Console.WriteLine("9: Quit application");
+    Console.Write("Your selection: ");
+
+    userSelection = Console.ReadLine();
+
+    switch (userSelection)
+    {
+        case "1":
+            Utilities.RegisterEmployee(employees);
+            break;
+        case "2":
+            Utilities.ViewAllEmployees(employees);
+            break;
+        case "3":
+            Utilities.SaveEmployees(employees);
+            break;
+        case "4":
+            Utilities.LoadEmployees(employees);
+            break;
+        case "9":
+            break;
+        default:
+            Console.WriteLine("Invalid selection. Please try again.");
+            break;
+    }
+
+} while (userSelection != "9");
+
+Console.WriteLine("Thanks for using the application");
