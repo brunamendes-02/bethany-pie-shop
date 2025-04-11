@@ -1,0 +1,2 @@
+firstNamesdf;lastNamesdfs;emaildsfs;Birthday13/06/2000;hourlyRate50;type:1
+firstNameere;lastNametreter;emailretert;Birthday13/05/2000;hourlyRate60;type:3
