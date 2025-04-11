@@ -1,2 +1,2 @@
-firstName:bruna;lastName:mendes;email:ksdjhfks;Birthday:13/06/2002;hourlyRate:60;type:1
-firstName:leticia;lastName:xcruz;email:sdfsd;Birthday:18/08/2000;hourlyRate:60;type:4
+firstName:bruna;lastName:mendes;email:teste@teste.com;Birthday:13/06/1802;hourlyRate:60;type:1
+firstName:leticia;lastName:cruz;email:teste@teste.com;Birthday:18/08/1900;hourlyRate:60;type:4

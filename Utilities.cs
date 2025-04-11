@@ -7,9 +7,7 @@ namespace BethanysPieShopHRM
     public class Utilities
     {
         private static string directory = Path.Combine(Environment.CurrentDirectory, "data");
-
         private static string fileName = "employees.txt";
-
         internal static void RegisterEmployee(List<Employee> employees)
         {
             Console.WriteLine("Creating an Employee");
@@ -63,7 +61,6 @@ namespace BethanysPieShopHRM
             employees.Add(employee);
             Console.WriteLine("Employee created!");
         }
-
         internal static void CheckForExistingEmployeeFile()
         {
             string path = $"{directory}{fileName}";
@@ -94,56 +91,98 @@ namespace BethanysPieShopHRM
             }
         }
 
-        internal static void LoadEmployees(List<Employee> employees)
+        internal static void LoadEmployeeById(List<Employee> employees)
         {
-            string path = Path.Combine(directory, fileName);
-            if (File.Exists(path))
+            try
             {
-                employees.Clear();
-
-                string[] employeesAsString = File.ReadAllLines(path);
-                for (int i = 0; i < employeesAsString.Length; i++)
-                {
-                    string[] employeeSplits = employeesAsString[i].Split(";");
-                    string firstName = employeeSplits[0].Substring(employeeSplits[0].IndexOf(":") + 1);
-                    string lastName = employeeSplits[1].Substring(employeeSplits[1].IndexOf(":") + 1);
-                    string email = employeeSplits[2].Substring(employeeSplits[2].IndexOf(":") + 1);
-                    DateTime birthDay = DateTime.Parse(employeeSplits[3].Substring(employeeSplits[3].IndexOf(":") + 1));
-                    double hourlyRate = double.Parse(employeeSplits[4].Substring(employeeSplits[4].IndexOf(":") + 1));
-                    string employeeType = employeeSplits[5].Substring(employeeSplits[5].IndexOf(":") + 1);
-
-                    Employee employee = null;
-
-                    switch (employeeType)
-
-                    {
-                        case "1":
-                            employee = new Employee(firstName, lastName, email, birthDay, hourlyRate);
-                            break;
-                        case "2":
-                            employee = new Manager(firstName, lastName, email, birthDay, hourlyRate);
-                            break;
-                        case "3":
-                            employee = new StoreManager(firstName, lastName, email, birthDay, hourlyRate);
-                            break;
-                        case "4":
-                            employee = new Researcher(firstName, lastName, email, birthDay, hourlyRate);
-                            break;
-                        case "5":
-                            employee = new JuniorResearcher(firstName, lastName, email, birthDay, hourlyRate);
-                            break;
-
-                    }
-
-                    employees.Add(employee);
-                }
-
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Loaded {employees.Count} employees!\n\n");
+                Console.WriteLine($"Enter the employee id:");
+                int selectedId = int.Parse(Console.ReadLine());
+                Employee selectedEmployee = employees[selectedId];
+                selectedEmployee.DisplayEmployeeDetails();
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("This ID wasn`t found");
                 Console.ResetColor();
             }
         }
 
+        internal static void LoadEmployees(List<Employee> employees)
+        {
+            try
+            {
+
+                string path = Path.Combine(directory, fileName);
+                if (File.Exists(path))
+                {
+                    employees.Clear();
+
+                    string[] employeesAsString = File.ReadAllLines(path);
+                    for (int i = 0; i < employeesAsString.Length; i++)
+                    {
+                        string[] employeeSplits = employeesAsString[i].Split(";");
+                        string firstName = employeeSplits[0].Substring(employeeSplits[0].IndexOf(":") + 1);
+                        string lastName = employeeSplits[1].Substring(employeeSplits[1].IndexOf(":") + 1);
+                        string email = employeeSplits[2].Substring(employeeSplits[2].IndexOf(":") + 1);
+                        DateTime birthDay = DateTime.Parse(employeeSplits[3].Substring(employeeSplits[3].IndexOf(":") + 1));
+                        double hourlyRate = double.Parse(employeeSplits[4].Substring(employeeSplits[4].IndexOf(":") + 1));
+                        string employeeType = employeeSplits[5].Substring(employeeSplits[5].IndexOf(":") + 1);
+
+                        Employee employee = null;
+
+                        switch (employeeType)
+
+                        {
+                            case "1":
+                                employee = new Employee(firstName, lastName, email, birthDay, hourlyRate);
+                                break;
+                            case "2":
+                                employee = new Manager(firstName, lastName, email, birthDay, hourlyRate);
+                                break;
+                            case "3":
+                                employee = new StoreManager(firstName, lastName, email, birthDay, hourlyRate);
+                                break;
+                            case "4":
+                                employee = new Researcher(firstName, lastName, email, birthDay, hourlyRate);
+                                break;
+                            case "5":
+                                employee = new JuniorResearcher(firstName, lastName, email, birthDay, hourlyRate);
+                                break;
+
+                        }
+
+                        employees.Add(employee);
+                    }
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"Loaded {employees.Count} employees!\n\n");
+                }
+            }
+            catch (IndexOutOfRangeException iex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Something went wront parsing the file, please check the data!");
+                Console.WriteLine(iex.Message);
+            }
+            catch (FileNotFoundException fnfex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("This file couldn't be found");
+                Console.WriteLine(fnfex.Message);
+                Console.WriteLine(fnfex.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Something went wrong while loading the file!");
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Console.ResetColor();
+            }
+        }
         private static string GetEmployeeType(Employee employee)
         {
             if (employee is Manager)
